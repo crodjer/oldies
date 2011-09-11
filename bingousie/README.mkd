@@ -4,6 +4,8 @@ This is just a bingo board and nothing more which I wrote, so that during my
 family Bingo night, one person does not have to loose the fun of the game
 calling out the numbers.
 
+Hosted at: <http://bingousie.appspot.com/> (Google App engine python)
+
 The waplib dir is an attempt to initiate a mini framework supporting openid
 functionality and class based views for a little simplification with DRYer
 code.
