@@ -1,0 +1,30 @@
+{% extends 'base_template.html' %}
+{% load i18n %}
+{% block title %}Edit Post{% endblock %}
+{% block head %}
+<!--
+<script src="/media/js/nicEdit.js" type="text/javascript"></script>
+<script type="text/javascript">
+//<![CDATA[
+  bkLib.onDomLoaded(function() {
+    new nicEditor({fullPanel : true}).panelInstance('id_content');
+  });
+//]]>
+</script>
+-->
+{% endblock %}
+{% block content_heading %}read at{% endblock %}
+{% block content %}
+	<h2>Editing Post</h2>
+  <fieldset><a href = "{% url blog:post post.slug %}">View Post</a> | <a href = "{% url blog:delete post.slug %}?next={{ post.get_index_page }}">Delete </a></fieldset>
+  <form action = "" method = "post" class = "blog-form">
+	  {{ form.as_p }}		
+	  <input type = 'hidden' name= 'next' value = "{% url blog:post post.slug %}"/>
+	  <input type = 'submit' name= 'submit' value = "{% trans 'Post'%}"/> 
+	  <input type = 'submit' name= 'submit' value = "{% trans 'Save'%}"/> 	  
+  </form>
+  <br/>
+  <fieldset id = "key_link"><a href="{{ post.get_key_url }}">Post key link</a></fieldset>
+{% endblock %}
+{% block sidebar %}
+{% endblock %}

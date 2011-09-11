@@ -1,0 +1,8 @@
+<!-- messages -->			
+			<div id="messages">
+			<ul>
+  			{% for message in messages %}
+  			<li{% if message.tags %} class="{{ message.tags }} styled"{% endif %}><span class="message">{{ message|safe }}</span><span class="close-button" onclick="deleteElement(this.parentNode)"/>☒</span></li>
+		  	{% endfor %}
+		  </ul>
+			</div>

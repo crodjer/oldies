@@ -1,0 +1,88 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="keywords" content="rohan jain, crodjer, {% block keywords %}{% endblock %}blog, django">
+  <title>{% block title %}{% endblock %}</title>
+  <link rel="shortcut icon" href="{{ MEDIA_URL }}img/favicon.ico" />
+  <script type="text/javascript" src="{{ MEDIA_URL }}js/head.min.js"></script>  
+  <script type="text/javascript">
+    head.js({main:"{{ MEDIA_URL }}js/main.js"}, {jquery: "http://ajax.googleapis.com/ajax/libs/jquery/1.5.2/jquery.min.js"});
+    var disqus_developer = 1;
+    if (/Firefox[\/\s](\d+\.\d+)/.test(navigator.userAgent)){
+      var ffversion=new Number(RegExp.$1)
+      if (ffversion < 3)
+        location.replace("/old-browser/");
+    }
+  </script>  
+  <link rel='stylesheet' href="{{ MEDIA_URL }}css/style.css" type = 'text/css'>
+  <!--[if lt IE 8]>
+  <script type="text/javascript">
+    location.replace("/ie/?next=/");
+  </script>
+  <![endif]-->
+   	{% block head %}{% endblock %}   
+  <script type="text/javascript">
+		 var _gaq = _gaq || [];
+		 _gaq.push(['_setAccount', 'UA-15806710-5']);
+		 _gaq.push(['_trackPageview']);
+		
+		 (function() {
+		   var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+		   ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+		   var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		 })();
+  </script> 
+</head>
+<body>
+  <script type="text/javascript">
+    var color = getCookie("theme");
+    changeTheme(color);
+  </script>       
+  <header class="styled">
+    <nav>
+      {% block menu %}{% include "includes/menu.html" %}{% endblock %}
+    </nav>    
+    <div id="session">      
+      {% include "includes/session.html" %}
+    </div>
+    <!--
+    <div id="theme">
+      THEMES:
+      <ul>
+        <li title ="Django Green" style="background:rgb(68, 94, 84)" onclick="changeTheme('9, 46, 32')">&nbsp;</li>
+        <li title ="Cool Blue" style="background:rgb(91, 108, 125)" onclick="changeTheme('37, 62, 87')">&nbsp;</li>
+        <li title ="Beautiful Meganta" style="background:rgb(154, 109, 110)" onclick="changeTheme('135, 74, 76')">&nbsp;</li>
+        <li title ="Mehndi Green" style="background:rgb(101, 102, 74)" onclick="changeTheme('60, 62, 23')">&nbsp;</li>
+        <li title ="Simple Gray" style="background:rgb(138, 137, 134)" onclick="changeTheme('109, 108, 104')">&nbsp;</li>
+        <li title ="Bright Yellow" style="background:rgb(210, 220, 100)" onclick="changeTheme('222, 223, 111')">&nbsp;</li>
+      </ul>
+    </div>
+    -->
+    <h1><a href="/">Rohan Jain</a></h1>
+    <h2><span id="content_heading">{% block content_heading %}{% endblock %}</span> the crodjer's world</h2>
+      </header>
+  {% include 'includes/messages.html' %}
+  <section class="styled">    
+    {% block content %}{% endblock %}    
+  </section>
+  <footer class="styled">
+    {% block footer %}{% include "includes/footer.html" %}{% endblock %}
+  </footer>
+  <div id="google_translate_element" style="display:none"></div>
+  <script type="text/javascript">
+  {% if contact %}
+		var disqus_shortname = 'rohanjain';
+		(function () {
+	  	var s = document.createElement('script'); s.async = true;
+	  		s.src = 'http://disqus.com/forums/rohanjain/count.js';
+	  	(document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+		}());
+	{% endif %}	
+  	function googleTranslateElementInit() {
+      new google.translate.TranslateElement({pageLanguage: "en"}, "google_translate_element");
+    };
+	</script>
+	<script src="http://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>				  
+</body>
+</html>

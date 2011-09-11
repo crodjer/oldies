@@ -1,0 +1,43 @@
+{% extends 'base_template.html' %}
+{% load i18n %}
+{% block title %}Contact Me{% endblock %}
+{% block head %}
+  <script type="text/javascript">
+    function toggleVisibility(e)
+    {
+    var feedback_div = document.getElementById('feedback');
+    if (feedback_div.style.display=="none")
+    	feedback_div.style.display="block";
+    else
+    	feedback_div.style.display="none";
+    }
+  </script>
+{% endblock %}
+{% block content_heading %}reach{% endblock %}
+{% block content %}
+  <h2>Contact Me:</h2>
+  <article>  
+{% if request.user.is_active or human_verified %}
+	<form action = "" method = "post" class = "form" name = "contact_form" onload = update()>
+		<table>
+			{{ form }}			
+			<tr><td>&nbsp;</td><td><input class = 'btn' type = "submit" value = "{% trans 'Send' %}" /></td></tr>
+		</table>
+	</form>
+  <script type="text/javascript">
+    var email = document.getElementById("id_email");
+    var full_name = document.getElementById("id_name");
+	  email.value = "{{ request.user.email }}";
+	  full_name.value = "{{ request.user.get_full_name|safe }}";
+    if (email.value.length > 0) email.readOnly = true;    
+  </script>
+{% else %}  
+    To send me a mail please <b>login with your openid</b> <a href="/openid/login/?next=/contact/">here</a> (faster, just two clicks.) or <br/>    
+    <form action="/recaptcha/" method="post">   
+    {{ recaptcha_form.as_p }}
+    <input type="hidden" name = "next" value = "/contact/" />    
+    <input type="submit" value = "Verify"/>
+    </form>    
+{% endif %}
+  </article>
+{% endblock %}

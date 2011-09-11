@@ -1,0 +1,19 @@
+{% extends 'base_template.html' %}
+{% block title %}Verify yourself{%endblock%}
+{% block head %}
+{% endblock %}
+{% block content_heading %}verify yourself at{% endblock %}
+{% block content %}
+    <fieldset>           
+    {% if human_verified %}
+      You are already verified as a <b>human!</b>
+    {% else %}      
+      <form action="/recaptcha/" method="post" id="recaptcha_form">          
+        {{ form.as_p }}      
+        <input type="hidden" name = "next" value = "{{ next }}" />
+        <input type="submit" value = "Verify"/>
+      </form>         
+      </fieldset>
+  {% endif %}
+{% endblock %}
+{% block sidebar %}{% include "includes/sidebar.html" %}{% endblock %}

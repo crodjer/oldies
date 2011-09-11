@@ -1,0 +1,89 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" >
+<head>
+  <title>Log In with OpenID</title>
+  <style type="text/css">
+    html { background #EEE; padding:0; margin:0;height:100%}
+    body {font-family: Arial;background:#EEE; color:#555;margin:0 auto;position:relative; height:100%; width:800px}
+    #login-form {position:absolute; top:20%; left:100px; background:white;width:550px;padding:15px 25px;border:3px solid black;min-height:200px; display:block;}
+    .backlinks{float:right;font-size:small;}
+    fieldset {border-style:none;}
+    img {border-style:none;}
+    a{text-decoration:none; color:green;}
+    form.openid ul { text-align:center; list-style-type:none; display:inline;}
+    form.openid ul li {float:left; padding:4px}
+    form.openid ul li span {padding:0 1em 0 3px}
+    form.openid fieldset {clear:both; padding:1em 0}
+    form.openid div+fieldset {display:none}
+    form.openid label {display:block; font-weight:bold; font-size:medium; margin-bottom:.5em}
+    input[name=openid_username] {width:8em}
+    input[name=openid_identifier] {width:18em}
+    form.openid ul li.highlight { -moz-border-radius:4px; -webkit-border-radius:4px; background-color: #FD6}
+    form.openid fieldset div {font-family:arial;-moz-border-radius:4px; -webkit-border-radius:4px;background: #DCDCDC url({{ MEDIA_URL }}img/fadegrey.png); padding:10px;display:inline-block}
+    form.openid input[type='submit'] {margin-left:1em;}
+    .openid_logo{color:#F7931E;padding:6px 0px 8px 28px; background: url({{ MEDIA_URL }}img/openidico.png) no-repeat}
+    #openid_login{float:left; font-size:larger; width:30%; margin:2em 1em; text-align:center}
+    #openid_login div{margin-top:0.5em}
+    #openid_login div+span{font-size:smaller}
+  </style>
+  <script type="text/javascript" src="{{ MEDIA_URL }}js/jquery.min.js"></script>
+  <script type="text/javascript" src="{{ MEDIA_URL }}js/jquery.openid.js"></script>  
+</head>
+<body>
+{% if form.errors %}
+  {% if form.next.errors %}
+  <span class="error">{{ form.next.errors|join:", " }}</span> 
+  {% endif %}
+{% endif %}
+  <div id="login-form">
+    <span class="backlinks"><a href="{{ next }}">Go Back</a> &nbsp;&nbsp; <a href="/">Site Home</a></span>
+	  <h2>Log In with OpenID</h2>
+    <form class="openid" method="post" action="/openid/login/?next={{ next }}"> 
+    <div><ul class="providers"> 
+	  <li class="openid" title="OpenID"><img src="{{ MEDIA_URL }}img/openidW.png" alt="OpenID" /> 
+	  <span><strong>http://{your-openid-url}</strong></span></li> 
+	  <li class="direct" title="Google"> 
+	    <img src="{{ MEDIA_URL }}img/googleW.png" alt="Google" /><span>https://www.google.com/accounts/o8/id</span></li> 
+	  <li class="direct" title="Yahoo"> 
+	    <img src="{{ MEDIA_URL }}img/yahooW.png" alt="Yahoo" /><span>http://yahoo.com/</span></li> 
+    <li class="direct" title="MyOpenID"> 
+      <img src="{{ MEDIA_URL }}img/myopenidW.png" alt="MyOpenID" /><span>http://myopenid.com/</span></li>	    
+	  <li class="username" title="AOL screen name"> 
+	    <img src="{{ MEDIA_URL }}img/aolW.png" alt="AOL" /><span>http://openid.aol.com/<strong>username</strong></span></li> 	   
+	  <li class="username" title="Flickr user name"> 
+	    <img src="{{ MEDIA_URL }}img/flickr.png" alt="Flickr" /><span>http://flickr.com/<strong>username</strong>/</span></li> 
+	  <li class="username" title="Technorati user name"> 
+	    <img src="{{ MEDIA_URL }}img/technorati.png" alt="Technorati" /><span>http://technorati.com/people/technorati/<strong>username</strong>/</span></li> 
+	  <li class="username" title="Wordpress blog name"> 
+	    <img src="{{ MEDIA_URL }}img/wordpress.png" alt="Wordpress" /><span>http://<strong>username</strong>.wordpress.com</span></li> 
+	  <li class="username" title="Blogger blog name"> 
+	    <img src="{{ MEDIA_URL }}img/blogger.png" alt="Blogger" /><span>http://<strong>username</strong>.blogspot.com/</span></li> 
+	  <li class="username" title="LiveJournal blog name"> 
+	    <img src="{{ MEDIA_URL }}img/livejournal.png" alt="LiveJournal" /><span>http://<strong>username</strong>.livejournal.com</span></li> 
+	  <li class="username" title="ClaimID user name"> 
+	    <img src="{{ MEDIA_URL }}img/claimid.png" alt="ClaimID" /><span>http://claimid.com/<strong>username</strong></span></li> 
+	  <li class="username" title="Vidoop user name"> 
+	    <img src="{{ MEDIA_URL }}img/vidoop.png" alt="Vidoop" /><span>http://<strong>username</strong>.myvidoop.com/</span></li> 
+	  <li class="username" title="Verisign user name"> 
+	    <img src="{{ MEDIA_URL }}img/verisign.png" alt="Verisign"/><span>http://<strong>username</strong>.pip.verisignlabs.com/</span></li> 
+	  </ul></div>
+    <fieldset> 
+    <label for="openid_username">Enter your <span>Provider user name</span></label> 
+    <div><span></span><input type="text" name="openid_username" /><span></span> 
+    <input type="submit" value="Login" /></div> 
+    </fieldset> 
+    <fieldset> 
+    <label for="openid_identifier">Enter your <a target="_blank" class="openid_logo" href="http://openid.net">OpenID</a></label> 
+    <div>
+    {{ form.openid_identifier }}
+    <input type="submit" value="Login" />
+    </div> 
+    {% if next %}
+    <input type="hidden" name="next" value="{{ next }}" />
+    {% endif %}      
+    </fieldset> 
+  </form>
+  </div>
+  <script type="text/javascript">  $(function() { $("form.openid:eq(0)").openid(); });</script>
+</body>
+</html>

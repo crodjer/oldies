@@ -1,0 +1,14 @@
+{% extends "comments/base.html" %}
+{% load i18n markup %}
+{% block title %}{% trans "Remove a comment" %}{% endblock %}
+{% block content %}
+<h1>{% trans "Really remove this comment?" %}</h1>
+  <fieldset>
+  <div class="meta"><b>{{ comment.name|title }}</b> ( {{ comment.submit_date|timesince }} ago ) :</div>
+	{{ comment.comment|markdown:"safe"|removetags:"h1 h2" }}
+  </fieldset>  
+	<form action="." method="post">{% csrf_token %}
+	 {% if request.GET.next %}<input type="hidden" name="next" value="{{ request.GET.next }}?delete=true" id="next" />{% endif %}
+    <input type="submit" name="submit" value="{% trans 'Remove' %}" /> or <a href="{{ comment.get_absolute_url }}">cancel</a>
+	</form>
+{% endblock %}

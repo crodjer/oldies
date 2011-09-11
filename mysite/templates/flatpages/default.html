@@ -1,0 +1,31 @@
+{% extends 'base_template.html' %}
+{% load markup i18n %}
+{% block title %}{{ flatpage.title }}{%endblock%}
+{% block head %}
+<style type="text/css">
+  #tab, #heading{ display:none }
+</style>
+<script type="text/javascript">
+  function setTabs(tab_name, content_heading_text){
+    var content_heading = document.getElementById("content_heading");
+    var tab = document.getElementById(tab_name);
+    if (tab) tab.setAttribute("class", "current-page");
+    if (content_heading_text) content_heading.innerHTML=content_heading_text;
+  }
+  function checkTabs(){
+    var tab_name = document.getElementById("tab").innerHTML;
+    var content_heading_text = document.getElementById("heading").innerHTML;
+    setTabs(tab_name, content_heading_text);
+  }    
+</script> 
+{% endblock %}
+{% block content %}
+<article>
+{{ flatpage.content|markdown:"headerid,tables,toc,abbr,fenced_code,footnotes" }}
+</article>
+{%if request.user.is_superuser %}<fieldset><a href="/admin/flatpages/flatpage/{{flatpage.id}}" target="_blank">Edit this page</a></fieldset>{% endif %}
+<script type="text/javascript">
+  checkTabs();
+</script>  
+{% endblock %}
+{% block sidebar %}{% include "includes/sidebar.html" %}{% endblock %}

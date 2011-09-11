@@ -1,0 +1,24 @@
+{% extends 'base_template.html' %}
+{% load i18n markup %}
+{% block title %}Rohan Jain{%endblock%}
+{% block head %}
+{% endblock %}
+{% block content_heading %}welcome to{% endblock %}
+{% block content %}
+<article>
+{{ home_post.content|markdown:"headerid,tables,toc,abbr,fenced_code,footnotes" }}
+</article>
+<br/>
+<h2>Updates:</h2>
+{% for update in updates %}
+  <fieldset>
+	<div class="meta"><h3><a href="{% url main:updates update.slug  %}" style="text-decoration:none;">{{ update.title }}</a></h3></div>
+	{% if  update.description %}{{ update.description }}{% else %}{{ update.content|markdown:"headerid,tables,toc,abbr,fenced_code,footnotes"|removetags:"h1 h2 img article blockquote fieldset input textarea"|truncatewords:20 }}{% endif %}....<a href="{% url main:updates update.slug  %}" style="text-decoration:none;">more details</a> {% if perms.blog.change_post %}| <a href="{% url blog:edit update.slug %}?back=/" style="text-decoration:none;">Edit</a> | {% if update.publish %}<a href="{% url blog:delete update.slug %}?back=/" style="text-decoration:none;">Delete</a>{% else %}<a href="{% url blog:publish update.slug %}?back=/" style="text-decoration:none;">Publish</a>{% endif %}{% endif %}
+  </fieldset>
+  {% empty %}
+  <fieldset>
+  Sorry no updates to show till now.
+  </fieldset> 
+{% endfor %}
+{% endblock %}
+{% block sidebar %}{% include "includes/sidebar.html" %}{% endblock %}

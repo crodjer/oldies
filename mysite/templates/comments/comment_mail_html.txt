@@ -1,0 +1,13 @@
+{% load markup %} 
+Comment on <b>{{ title }}</b><br/> 
+
+<b>{{ name }}</b>: 
+{{ comment|markdown:"safe"|removetags:"h1 h2" }}
+
+<br/>
+<a href="{{ link }}{{ comment_suffix }}">See this comment on site</a> 
+
+<hr/>
+You recieved this mail because you are subscribed to the post: <a href="{{ link }}">{{ title }}</a>.
+If you don't wan't to recive these mails then unsubscribe by visiting:
+<a href="{{ unsubscribe_link }}">{{ unsubscribe_link }}</a>

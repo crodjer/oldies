@@ -1,0 +1,43 @@
+{% extends "comments/base.html" %}
+{% load i18n markup %}
+{% block title %}{% trans "Preview your comment" %}{% endblock %}
+{% block content %}
+  {% load comments %}  
+  {% if form.errors %}
+  <h1>{% blocktrans count form.errors|length as counter %}Please correct the error below{% plural %}Please correct the errors below{% endblocktrans %}</h1>
+  {% else %}
+  <h1>{% trans "Preview your comment" %}</h1>
+  <fieldset>     
+		{{ comment|markdown:"safe"|removetags:"h1 h2" }}
+  </fieldset>
+  {% endif %}
+<form action="{% comment_form_target %}" method="post" class="comment-form">{% csrf_token %}
+  {% if next %}<input type="hidden" name="next" value="{{ next }}" />{% endif %}
+  {% if not form.errors %}
+	<div style="margin:20px 0 10px 10px;">
+		<input type="submit" name="submit" class="submit-post" value="{% trans "Post your comment" %}" id="submit" /> {% trans "or make changes" %}:
+   	</div>
+  {% endif %}
+  <fieldset>
+      You may use <a href="http://en.wikipedia.org/wiki/Markdown#Syntax_examples" target="_blank">markdown syntax</a> in your comment.
+	  <table>
+      {{ form }}
+      <tr class="submit">
+        <td><input type="submit" name="submit" class="submit-post" value="{% trans "Post" %}" /></td>
+        <td><input type="submit" name="preview" class="submit-preview" value="{% trans "Preview" %}" /> {% trans "or go" %} <a href ="{{ next }}comment/">{% trans "back" %}</td>
+      </tr>
+       </table>
+       <input type="hidden" name="next" value="{{ next }}" />
+	</fieldset>
+	{% if user.is_active %}
+	<script type="text/javascript">
+	  var email = document.getElementById("id_email");
+	  var full_name = document.getElementById("id_name");
+	  email.value = "{{ request.user.email }}";
+	  full_name.value = "{{ request.user.get_full_name }}";
+	  if (email.value.length > 0) email.readOnly = true;
+	  if (full_name.value.length > 0) full_name.readOnly = true;        
+	</script>
+	{% endif %}	
+</form>
+{% endblock %}

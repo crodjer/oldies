@@ -1,0 +1,6 @@
+{% load i18n %}
+{% if request.user.is_authenticated %}
+  <strong>{{ request.user.get_full_name }}</strong> | <a href="/openid/logout/?next={{ request.META.PATH_INFO }}">{% trans "Log Out" %}</a>  
+{% else %}
+  <a href="/openid/login/?next={{ request.META.PATH_INFO }}">{% trans "Log In" %}</a>  
+{% endif %}

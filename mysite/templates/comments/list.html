@@ -1,0 +1,33 @@
+{% load comments i18n mytags markup  %}
+{% for comment in comment_list %}
+{% if comment.is_removed  %}
+<div class="comment" id="c{{ comment.id }}" >
+  <div class="meta">
+  	<b>{{ comment.name|title }}</b> ( {{ comment.submit_date|timesince }} {% trans ago %} ) :
+  	<span>
+	  	{% if perms.comment.approve %}<a href ="/comments/approve/{{comment.id}}/?next={{request.META.PATH_INFO}}">Approve</a>{% endif %}
+	  	<a href="{% get_comment_permalink comment %}">{% trans "Permalink"%}</a>
+  	</span>
+  </div>
+  {% gravatar comment.user_email %}
+  <div class="comment_content">      
+	 {% if perms.comment.approve %}{{ comment.comment|markdown:"safe"|removetags:"h1 h2" }}{% else %}<span style="text-align:center;">--- The comment has been removed due to inappropriacy ---</span>{% endif %}
+	</div>
+</div>
+{% else %}
+<div class="comment" id="c{{ comment.id }}" >    
+  <div class="meta">    
+  	<b>{{ comment.name|title }}</b> ( {{ comment.submit_date|timesince }} {% trans 'ago'%} ) :
+  	<span>
+	  	{% if perms.comment.delete %}<a title = "{% trans 'Remove this comment'%}" href="/comments/delete/{{comment.id}}?next={{request.META.PATH_INFO}}">{% trans "Delete"%}</a>{% endif %}
+			{% if request.user.is_active %}<a title = "{% trans 'Flag this comment as inappropriate'%}" href="/comments/flag/{{comment.id}}?next={{request.META.PATH_INFO}}">{% trans "Flag"%}</a>{% endif %}
+	  	<a title = "{% trans 'Permanent link to this comment'%}" href="{% get_comment_permalink comment %}">{% trans 'Permalink'%}</a>
+  	</span>  	
+  </div>   
+  {% gravatar comment.user_email %}
+  <div class="comment_content">      
+	  {{ comment.comment|markdown:"safe"|removetags:"h1 h2" }}
+	</div>
+</div>
+{% endif %}
+{% endfor %}   	

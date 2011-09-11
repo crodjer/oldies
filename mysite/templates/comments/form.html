@@ -1,0 +1,23 @@
+{% load comments i18n %}
+<fieldset>
+    You may use <a href="http://en.wikipedia.org/wiki/Markdown#Syntax_examples" target="_blank">markdown syntax</a> in your comment.
+	<table>
+	  {{ form }}
+	  <tr class="submit">
+	    <td><input type="submit" name="submit" class="submit-post" value="{% trans 'Post' %}" /></td>
+	    <td><input type="submit" name="preview" class="submit-preview" value="{% trans 'Preview' %}" /> {% trans "or go" %} <a href ="{{ next }}">{% trans "back" %}</td>
+	  </tr>
+	</table>
+	<input type="hidden" name="next" value="{{ next }}comment/" />
+{% if user.is_active %}
+<script type="text/javascript">
+  var email = document.getElementById("id_email");
+  var full_name = document.getElementById("id_name");
+  email.value = "{{ request.user.email }}";
+  full_name.value = "{{ request.user.get_full_name }}";
+  if (email.value.length > 0) email.readOnly = true;
+  if (full_name.value.length > 0) full_name.readOnly = true;        
+</script>
+{% endif %}
+</form>
+</fieldset>

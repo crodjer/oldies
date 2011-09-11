@@ -1,0 +1,50 @@
+{% extends 'base_template.html' %}
+{% load i18n comments markup %}
+{% block title %}Blog{% endblock %}
+{% block head %}
+{% endblock %}
+{% block content_heading %}read at{% endblock %}
+{% block content %}
+{% if posts %}
+{% endif %}
+{% for post in posts %}
+{% if django_comments %}
+{% get_comment_count for post as comments_count %}
+{% endif %}
+<article id="{{ post.slug }}">
+  <h1 class="title"><a href="{% url blog:post post.slug %}">{{ post }}</a></h1>
+    <div class="meta">
+      <b>{% if post.user.get_full_name %}{{ post.user.get_full_name }}{% else %}{{ post.user }}{% endif %}</b> ( {{ post.added_on }} ) 
+      <span>
+        <a href="{% url blog:post post.slug %}">{% trans 'View Post' %}</a>
+        {% if post.comments_allowed %}{% if django_comments %}<a href="{% url blog:post post.slug %}#comment" title = "{% trans 'Comment on this post'%}">{{ comments_count }} Comment{{ comments_count|pluralize }}</a>{% else %}<a href="{% url blog:post post.slug %}#disqus_thread" title = "{% trans 'Comment on this post'%}">{% trans 'Comment'%}</a>{% endif %}{% endif %}
+        {% if perms.blog.change_post %}
+        <a title = "{% trans 'Edit this post'%}" href = "{% url blog:edit post.slug %}?next={{ request.META.PATH_INFO }}#{{ post.slug }}">{% trans 'Edit'%}</a>
+        {% if post.publish %}
+        <a title = "{% trans 'Delete this post'%}" href = "{% url blog:delete post.slug %}?next={{ request.META.PATH_INFO }}#{{ post.slug }}">{% trans 'Delete'%}</a>        
+        {% else %} 
+        <a title = "{% trans 'Publish this post'%}" href = "{% url blog:publish post.slug %}?next={{ request.META.PATH_INFO }}#{{ post.slug }}">{% trans 'Publish'%}</a>            
+        {% endif %}       
+        {% endif %}
+      </span>
+    </div>  
+  {% if post.description %}
+    {{ post.description|linebreaksbr }}
+  {% else %}
+    {{ post.content|markdown:"headerid,tables,toc,abbr,fenced_code,footnotes"|removetags:"h1 h2 img article fieldset input textarea"|truncatewords_html:40 }}
+  {% endif  %}
+</article>   
+{% empty %}
+  Sorry No posts
+{% endfor %}
+{% if posts %}
+<fieldset style="position:relative;">
+<span class="paginator left">{% if page.has_next %}<a title ="Older Posts" href="{% url blog:index-page page.next_page_number %}" >«</a>{% else %}«{% endif %}</span>
+  <span class="paginator right">{% if page.has_previous %}<a title ="Newer Posts" href="{% url blog:index-page page.previous_page_number %}" >»</a>{% else %}»{% endif %}</span>
+  &nbsp;&nbsp;&nbsp;<a href="http://feeds.feedburner.com/RohanJainsBlog" rel="alternate" type="application/rss+xml"><img src="http://www.feedburner.com/fb/images/pub/feed-icon16x16.png" alt="" style="vertical-align:middle;border:0"/></a>&nbsp;<a href="http://feeds.feedburner.com/RohanJainsBlog" rel="alternate" type="application/rss+xml">Subscribe</a>
+{% endif %}
+{% if request.user.is_staff %} | <a href = "/blog/new">New post</a>{% endif %}
+{% endblock %}
+{% block sidebar %}
+{% endblock %}
+

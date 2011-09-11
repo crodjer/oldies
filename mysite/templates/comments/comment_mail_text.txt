@@ -1,0 +1,13 @@
+Comment on {{ title }} 
+
+{{ name }}:
+----------
+ 
+{{ comment }}
+
+
+See this comment on site: {{ link }}{{ comment_suffix }} 
+---------
+You recieved this mail because you are subscribed to the post: {{ title }} ({{ link }})
+If you don't wan't to recive these mails then unsubscribe by visiting:
+{{ unsubscribe_link }}

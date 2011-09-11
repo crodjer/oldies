@@ -1,0 +1,89 @@
+{% extends 'base_template.html' %}
+{% block title %}{{ post }}{% endblock %}
+{% block keywords %}{% if post.keywords %}{{ post.keywords }}, {% endif %}{% endblock %}
+{% block head %}
+{% endblock %}
+{% block content_heading %}read at{% endblock %}
+{% block content %}
+{% load comments i18n blog-tags markup %}
+{% if django_comments %}
+{% get_comment_count for post as comments_count %}
+{% endif %}  
+	<article>
+	  <h1 class="title"><a href="{% url blog:post post.slug %}">{{ post }}</a></h1>
+	  <div class="meta">
+	  	<b>{% if post.user.get_full_name %}{{ post.user.get_full_name }}{% else %}{{ post.user }}{% endif %}</b> ( {{ post.added_on }} ) 
+	  	<span>
+	  		<a href="{% get_index_page post user %}">{% trans 'Index' %}</a>
+	  		{% if post.comments_allowed %}{% if django_comments %}<a href="#comment" title = "{% trans 'Comment on this post'%}">{{ comments_count }} Comment{{ comments_count|pluralize }}</a>{% else %}<a href="{% url blog:post post.slug %}#disqus_thread" title = "{% trans 'Comment on this post'%}">{% trans 'Comment'%}</a>{% endif %}{% endif %}
+	  		{% if perms.blog.change_post %}
+        <a title = "{% trans 'Edit this post'%}" href = "{% url blog:edit post.slug %}">{% trans 'Edit'%}</a>
+        {% if post.publish %}
+        <a title = "{% trans 'Delete this post'%}" href = "{% url blog:delete post.slug %}">{% trans 'Delete'%}</a>        
+        {% else %} 
+        <a title = "{% trans 'Publish this post'%}" href = "{% url blog:publish post.slug %}">{% trans 'Publish'%}</a>           	
+      	{% endif %}      	
+	  		{% endif %}
+	  	</span>
+	  </div>  
+	  {{ post.content|markdown:"headerid,tables,toc,abbr,fenced_code,footnotes" }}
+	  <hr/>	  
+	  <span id="subscription">Subscribe</span>: <a href="http://feeds.feedburner.com/RohanJainsBlog" rel="alternate" type="application/rss+xml"><img src="http://www.feedburner.com/fb/images/pub/feed-icon16x16.png" alt="" style="vertical-align:middle;border:0"/></a>&nbsp;<a href="http://feeds.feedburner.com/RohanJainsBlog" rel="alternate" type="application/rss+xml">Blog Feed</a>{% if django_comments %} | {% get_subscribe_link post user %}{% endif %}
+	  {% if django_comments %}
+	  <br/>	  
+    {% render_comment_list for post %}
+    {% endif %}	  
+	</article>	
+{% if post.comments_allowed %}
+  {% if django_comments %}
+  <h2>Post a Comment:</h2>	    
+    <fieldset id="comment">    
+    {% if request.user.is_active or human_verified %}
+	  {% get_comment_form for post as comment_form %}	  
+	  <form action="{% comment_form_target %}" class ="comment-form" method="post">	    
+	  You may use <a href="http://en.wikipedia.org/wiki/Markdown#Syntax_examples" target="_blank">markdown syntax</a> in your comment.
+	  <table>	    
+	  {{ comment_form }}
+	  <tr class="submit">	  
+	    <td><input type="submit" name="preview" class="submit-preview" value="{% trans "Preview" %}" /></td>
+	  </tr>
+	  </table>
+	  <input type="hidden" name="next" value="{% url blog:post post.slug %}" />
+	  </form>	   
+    <script type="text/javascript">
+      var email = document.getElementById("id_email");
+      var full_name = document.getElementById("id_name");
+      email.value = "{{ request.user.email }}";
+      full_name.value = "{{ request.user.get_full_name|safe }}";
+      if (email.value.length > 0) email.readOnly = true;
+      if (full_name.value.length > 0) full_name.readOnly = true;        
+    </script>	           
+	  {% else %}	  
+	  Please <b>login with your openid</b> <a href="/openid/login/?next={% url blog:post post.slug %}comment">here</a> (faster, just two clicks.) <b>or</b> <br/>
+	  <form action="/recaptcha/" method="post">	  
+	  {{ recaptcha_form.as_p }}
+	  <input type="hidden" name = "next" value = "{% url blog:post post.slug %}comment" />	  
+	  <input type="submit" value = "Verify"/>	  
+	  </form>	  
+	  {% endif %}	  
+	  </fieldset>   
+  {% else %}	 
+		<div id="disqus_thread" >
+		</div>
+		<script type="text/javascript">
+		  var disqus_identifier = "post_{{ post.slug }}";
+		  var disqus_def_name = "{{ request.user.get_full_name|safe }}";
+		  var disqus_def_email = "{{ request.user.email }}";
+		  (function() {
+		   	var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+		   	dsq.src = 'http://rohanjain.disqus.com/embed.js';
+		   	(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+		  })();
+		</script>
+		<noscript>Please enable javascript for posting here.</noscript>
+	{% endif %}
+{% endif %}	
+<script src="http://feeds.feedburner.com/~s/RohanJainsBlog?i={% url blog:post post.slug %}" type="text/javascript"></script>
+{% endblock %}
+{% block sidebar %}
+{% endblock %}

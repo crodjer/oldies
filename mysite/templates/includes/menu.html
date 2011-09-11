@@ -1,0 +1,7 @@
+<!--menu-->
+      <ul>
+        <li><a href='{% url main:home %}' class = "{% if home %}current-page{% endif %}" id ="menu_home" >HOME</a></li>        
+        <li><a href='/resume/' class = "{% if resume %}current-page{% endif %}" id ="menu_resume">RÉSUMÉ</a></li>        
+        <li><a href='{% url blog:index %}' class = "{% if blog %}current-page{% endif %}" id ="menu_blog">BLOG</a></li>          
+        <li><a href='{% url main:contact %}' class = "{% if contact %}current-page{% endif %}" id ="menu_contact">CONTACT</a></li>
+      </ul>      
