@@ -1,0 +1,9 @@
+####Automated movies scraper
+
+Crawls around various web movie download forums and imdb to fetch movie
+info, download links and then stores them in the database.
+
+Update:  
+This won't and would not be attempted to be made to work anymore.  
+Have put the code up because it was one of my first project and the only one of
+which the code still exists.

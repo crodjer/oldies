@@ -1,0 +1,41 @@
+{% extends 'layout.html' %}
+{% block content_heading %}The Movie Database{% endblock %}
+{% block content %}
+	<span style = "float:right; margin-right:250px;"><a href = '/list'>List Movies</a> | <a href = "/">Back to Home</a></span>
+	<div class = "form">
+		<h3>Add forum page:</h3>
+		<form action = "/saving/" method = "post">
+			{% csrf_token %}
+			<table>
+				<tr><td width = "160px">Forum Page URL:</td><td><input type = "text" name = "forum_page_url" size = "60"/></td><td>Eg: "http://www.onlywarez.org/index.php?/forum/18-guest-downloads/"</td></tr>
+				<tr><td>General Movie Regex:</td><td><input type = "text" name = "forum_movie_regex" size = "60"/></td><td>Eg: "http://www.onlywarez.org/index.php\?/topic/\S+/$" <span style = "font-size:x-small"><br/>( Please take care that you give complete forum url ending in a "$", or it will lead in duplications. )</span></td></tr>
+				<tr><td><input type = "submit" name = "submit" value = "Add"/></td><td></td></tr>
+			</table>		
+			<input type = "hidden" name = "add_type" value = "page"/>
+		</form>
+	</div>
+	<div class = "form">
+		<h3>Simple Add:</h3>
+		<form action = "/saving/" method = "post">
+			{% csrf_token %}
+			<table>
+				<tr><td width = "160px">Forum Link:</td><td><input type = "text" name = "forum_url" size = "60"/></td></tr>
+				<tr><td><input type = "submit" name = "submit" value = "Add"/></td><td></td></tr>
+			</table>		
+			<input type = "hidden" name = "add_type" value = "simple"/>
+		</form>
+	</div>
+	<br /><br /><br /><br />
+	<div class = "form">
+		<h3>Manual Add:</h3>
+		<form action = "/saving/" method = "post">
+			{% csrf_token %}
+			<table>
+				<tr><td width = "160px">Forum Link:</td><td><input type = "text" name = "forum_url" size = "60"/></td></tr>
+				<tr><td>IMDB Link:</td><td><input type = "text" name = "imdb_url" size = "60"/></td></tr>
+				<tr><td><input type = "submit" name = "submit" value = "Add"/></td><td></td></tr>
+			</table>	
+			<input type = "hidden" name = "add_type" value = "manual"/>
+		</form>
+	</div>
+{% endblock %}

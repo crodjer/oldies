@@ -1,0 +1,11 @@
+New additions:
+<table style = "width:80%">
+    {% for info in down_infos %}
+	<tr>
+		<td><a href = "/{{ info.movie.id }}">{{ info.movie.name }}</a></td>
+		<td><small>{{ info }}</small></td>
+	</tr>
+	{% endfor %}
+</table>
+<br/><br/>
+<a href = "/list">List All</a>

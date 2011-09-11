@@ -1,0 +1,6 @@
+# use glob syntax.
+syntax: glob
+settings.py
+production_settings.py
+*.sqlite
+*.pyc

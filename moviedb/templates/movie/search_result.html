@@ -1,0 +1,206 @@
+{% extends 'layout.html' %}
+{% block content_heading %}The Movie Database{% endblock %}
+{% block head %}
+<!--
+    Search Built by raw ajax and javascript no any libraries used.
+    Makes a small cache of the search results. Utilizing the great json serialization.
+    Up and down arrow keys select various search results
+    Work of Rohan Jain.
+-->
+<script type="text/javascript">
+    var cache_suggestions = [], suggestionBoxId = 'suggestions',last_query="", queryBoxId = "query";
+    var current_suggestions = [], suggestHighlighted = false;
+    function flushSuggestions()
+    {
+        suggestionBox = document.getElementById(suggestionBoxId);
+        suggestionBox.style.display="none";
+        suggestionBox.innerHTML = "";
+    }
+    function blurSuggestions()
+    {
+        setTimeout(flushSuggestions, 300);
+    }
+    function showSuggestions(given_response)
+    {
+        suggestionBox = document.getElementById(suggestionBoxId);
+        queryBox = document.getElementById(queryBoxId);
+        flushSuggestions();
+        if (queryBox.value)//This check is to confirm that the value in the query box is not empty to prevent it from rendering value of last query.
+        {
+            for (var i in given_response)
+            {
+                suggestionBox.style.display="block";
+                if (given_response[i].highlighted)
+                    suggestionBox.innerHTML += "<a href = \""+ given_response[i].url+"\"class=\"highlighted\">" + given_response[i].name + "</a>";
+                else
+                    suggestionBox.innerHTML += "<a href = \""+ given_response[i].url+"\">" + given_response[i].name + "</a>";
+            }
+        }
+    }
+    function checkQuery(query)
+    {
+        if (query)
+        {
+            current_suggestions = [];
+            if(query.search(last_query)==0 || ( last_query.search(query)==0 && last_query.length - query.length < 5 && query.length>2))  //Check if the new query and last query start with same string or not
+            {
+                for (var i in cache_suggestions)
+                {
+                    if (cache_suggestions[i].name.toLowerCase().search(query.toLowerCase())!=-1)
+                    {
+                        current_suggestions.push(cache_suggestions[i]);
+                    }                
+                }//Creates a subset of the cache_suggestions and keeps old one in cache saving time and bandwidth.
+                if (current_suggestions[0])
+                {
+                    showSuggestions(current_suggestions);
+                    if (last_query.length - query.length < 0)
+                    {
+                        last_query = query;
+                    }
+                    return false;
+                }
+            }
+            old_suggestions = [];
+            return true;
+        }
+        else 
+        {
+            flushSuggestions();
+            return false;
+        }
+    }
+    function getSuggestions(query)
+    {
+        var response = [];        
+        suggestionBox = document.getElementById(suggestionBoxId);
+        query = query.replace('  ',' ').toLowerCase();
+        if (checkQuery(query))//Check if query is not null and if the old data can be used
+        {
+            suggestionBox.style.display="block";
+            xmlhttp = (window.XMLHttpRequest)?new XMLHttpRequest():new ActiveXObject("Microsoft.XMLHTTP");
+            xmlhttp.onreadystatechange=function()
+            {
+                if (xmlhttp.readyState==4 && xmlhttp.status==200)
+                {
+                    response = eval('(' + xmlhttp.responseText + ')');
+                    flushSuggestions();
+                    if (response)
+                    {
+                        showSuggestions(response);
+                        cache_suggestions = response;
+                        last_query = query;
+                    }
+                } 
+                else if(xmlhttp.readyState==4 && xmlhttp.status >= 400 && xmlhttp.status <= 500)
+                {
+                    flushSuggestions();
+                }
+                else
+                {
+                    suggestionBox.innerHTML="<img src = \"/media/img/ajax-loader-search.gif\" style = \"width:395px; height:12px;\"/\>";
+                }
+
+            }
+            xmlhttp.open("POST","/search/",true);
+            xmlhttp.send("csrfmiddlewaretoken={{ csrf_token }}&is_ajax=true&query="+query);
+            
+        }
+    }
+    function keyPressed(event, query)
+    { 
+        queryBox = document.getElementById(queryBoxId);
+        var key;
+        if(window.event)
+            key = window.event.keyCode;     //IE
+        else 
+            key = event.which;     //firefox
+        //alert(key);
+        if (key == 32 || key == 13)
+            for(var i=0; i<current_suggestions.length-1; i++) 
+            {
+               	if (current_suggestions[i].highlighted )
+               	{
+               	    location.replace(current_suggestions[i].url);
+               	}
+            }
+        if (key == 40)
+        {
+            if (current_suggestions.length>0)
+            {
+                for(var i=0; i<current_suggestions.length-1; i++) 
+                {
+                   	if (current_suggestions[i].highlighted )
+                   	{
+                   	    current_suggestions[i].highlighted = false;
+                   	    current_suggestions[i+1].highlighted = true;
+                   	    queryBox.value = current_suggestions[i+1].name;
+                   	    showSuggestions(current_suggestions);
+                   	    return true;
+                   	    break;
+                   	}
+                }
+                if (!current_suggestions[i].highlighted )
+                {
+                    current_suggestions[0].highlighted = true;
+                    queryBox.value = current_suggestions[0].name; 
+                }   
+                showSuggestions(current_suggestions);
+                return true;
+            }
+        }
+        else if (key == 38)
+        {
+            if (current_suggestions.length>0)
+            {
+                for(var i=1; i<current_suggestions.length; i++) 
+                {
+                   	if (current_suggestions[i].highlighted )
+                   	{
+                   	    current_suggestions[i].highlighted = false;
+                   	    current_suggestions[i-1].highlighted = true;
+                   	    queryBox.value = current_suggestions[i-1].name;
+                   	    showSuggestions(current_suggestions);
+                   	    return true;
+                   	    break;
+                   	}
+                }
+                showSuggestions(current_suggestions);
+                return true;
+            }
+        }
+
+        else
+        for(var i=0; i<cache_suggestions.length; i++) 
+        {
+            cache_suggestions[i].highlighted = false;
+        }
+        getSuggestions(query);
+        
+    }
+</script>
+{% endblock %}
+{% block content %}
+	<div id = "search">
+	    <form action = "/search/" method = "GET">
+	        {% csrf_token %}
+    	    <input type = "text"  id = "query" class = "query" name = "query" onblur="blurSuggestions()" onkeyup="keyPressed(event, this.value)" autocomplete="off"/><input type = "submit" class = "btn" value ="Search"/>
+            <input type = "hidden" name = "next" value ="{{ request.META.PATH_INFO }}"/>
+    	</form>
+	    <div id = "suggestions" onblur="flushSuggestions()">
+	    <img src = "/media/img/ajax-loader-search.gif" style = "width:395px; height:12px;">
+	    </div>
+	</div>
+   <h3>Movies starting with "{{ query }}":</h3>
+   {% for movie in movies %}
+       <a href="{{ movie.get_absolute_url }}">{{ movie }}</a><br/>
+   {% empty %}
+   Sorry could not find movie with that name, Your query will be processed and added if any relevent info is found. 
+   {% endfor %}
+   {% if other_movies %}
+   <h3>Other movies:</h3>
+   {% for movie in other_movies %}
+          <a href="{{ movie.get_absolute_url }}">{{ movie }}</a><br/>
+   {% endfor %}
+   {% endif %}
+{% endblock %}

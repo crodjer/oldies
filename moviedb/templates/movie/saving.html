@@ -1,0 +1,53 @@
+{% extends 'layout.html' %}
+{% block head %}
+<script type="text/javascript" src="http://code.jquery.com/jquery-1.4.2.min.js"></script> 
+<script type="text/javascript">
+$(document).ready(function() { 
+        var i = 0;
+        function status() {
+		// I use $.ajax. getJSON seems to cache the last data on ie6. Firefox work tho.
+		    $.ajax ({
+			    type: "GET",
+			    url: "{% url movie.views.save_status %}",
+			    dataType: "json",
+			    cache: false, //VITAL line: the getJON func does not prevent caching!
+			    success: getStatus //Call this func when we have some data
+		    })		  
+		}
+		// Func to use the data fetched
+		function getStatus( data ) {
+			if (data) {
+			    i += 1;
+				document.getElementById("status").innerHTML = data;
+				window.setTimeout( status, 2000 );
+			}
+		} 
+    	function loadXMLDoc(){
+            $.ajax ({
+			        type: "GET",
+			        url: "{% url movie.views.save %}",
+			        cache: false, //VITAL line: the getJON func does not prevent caching!
+			        success: result, //Call this func when we have some data
+		        })		
+        }
+        function result(data,textStatus, XMLHttpRequest){
+            document.getElementById("result").innerHTML = XMLHttpRequest.responseText;
+            var status = XMLHttpRequest.status;
+            
+        }
+        //status();
+        loadXMLDoc();
+	}); //end ready
+</script>
+{% endblock %}
+{% block content_heading %}The Movie Database{% endblock %}
+{% block content %}
+    <div id = "result">
+	Adding the info <img src = "/media/img/ajax-loader.gif"/>
+	    <div id = "status" style = "margin-left:0px; font-size:small; margin-top:20px;">
+        </div>    	    
+    </div>
+{% endblock %}
+{% block footer %}{% endblock %}
+
+<!-<meta http-equiv="REFRESH" content="0;url=/save">

@@ -1,0 +1,16 @@
+{% extends 'layout.html' %}
+{% block content_heading %}The Movie Database{% endblock %}
+{% block content %}
+	<span class = "side-links"><a href = '/add'>Add Movies</a> | <a href = "/">Back to Home</a></span>
+	<h2>Listing Movies</h2>
+	<table style = "width:80%">
+		<tr><th style = "width:60%">Movie</th><th>Released On</th></tr>
+		{% for movie in movies %}
+		<tr>
+			<td><a href = "/{{ movie.id }}">{{ movie.name }}</a><span class = "small">{{ movie.tagline }}</span></td>
+			<td><small>{{ movie.release_date }}</small></td>
+		</tr>
+		{% endfor %}
+    </table>
+	
+{% endblock %}
