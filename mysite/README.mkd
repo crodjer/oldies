@@ -1,4 +1,11 @@
-Personl Website
+My Old Personl Website based on django.
+This was actually my second attempt on a personal website and blogging engine
+with django. Lost the code to the first one.
 
-Rohan Jain
-(dcrodjer)
+Hosted:  
+Normal django/fcgi hosting: <http://old.rohanjain.in>
+
+Google App Engine:  <http://web.rohanjain.in>  
+(a much older version, coupled with django non-relational)
+
+Version controlled history (mercurial): <http://hg.rohanjain.in/personal-site>
