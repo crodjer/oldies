@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+{% block head %}
+{% endblock %}
+{% block js %}
+function animate_status(){
+  var status = $("#status")
+  status.stop(goToEnd=true);
+  for (i=1;i<=5;i=i+1)
+  {
+    status.animate({
+      bottom:"10px",
+      left:"10px",                    
+      fontSize:"100px",
+      width:"150px",
+      height:"120px",
+    },"slow");
+    status.animate({
+      bottom:"0",      
+      left:"0",
+      fontSize:"120px",
+      width:"175px",
+      height:"140px",
+    },"slow");
+  }    
+}
+function page_function(){  
+  var obj = $.parseJSON('{{ board.passed_numbers_json }}');    
+  for (var i in obj)
+    $("#n_"+obj[i]).addClass("passed");  
+  $("#n_{{ board.current_number }}").addClass("current");
+  animate_status();  
+  $("#button").click(function (){
+    $.getJSON('ajaxnum/', function(data){
+      $(".current").removeClass("current").addClass("passed");
+      $("#n_"+data[0]).addClass("current");     
+      $("#status").html(data[0]);
+      animate_status();  
+      if(data[1]){
+        $("#button").remove();
+        $(".hidden").removeClass("hidden");        
+      }      
+    }); 
+  });
+}  
+{% endblock %}
+{% block sidebar %}
+  {% if not board.finished %}
+    <span class = 'button' href='gennumber/' id ='button'>Next</span>    
+    <a class = 'button hidden' href='/'>Again</a>
+    <div id="done" class="hidden">Done!!</div>
+    <div id="status" >{{ board.current_number }}</div>
+  {% else %}      
+  <a class = 'button' href='/'>Again</a>
+  <div id="done">Done!!</div>  
+  <div id="status" >{{ board.current_number }}</div>  
+  {% endif %}      
+  {% endblock %}
+{% block content %}      
+  {% include 'table.html' %}   
+{% endblock %}
+

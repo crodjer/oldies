@@ -1,0 +1,5 @@
+Login with: 
+{% for provider in openid_providers %}
+<a href="{{ provider.login_url }}">{{ provider.name }}</a> 
+{% endfor %}
+

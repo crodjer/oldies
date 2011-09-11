@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"> 
+<head> 
+  <title>BingOusie</title>
+  <link rel="stylesheet" href="/media/css/style.css" type="text/css" >
+  <script type="text/javascript" src = "https://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js"></script>
+  {% block head %}{% endblock %}  
+  <script type="text/javascript">  
+  {% block js %}
+  {% endblock %}
+  $(document).ready(function(){        
+    $("body").fadeIn();
+    page_function();    
+  });
+  </script>  
+</head>
+
+<body>
+  <header>
+    <h1> BingOusie </h1>
+  </header>  
+  <section>
+  <aside>
+  {% block sidebar %}{% endblock %}
+  </aside>    
+  {% block content %}{% endblock %}
+  </section>  
+  <footer>
+    An app by <a href ="http://www.rohanjain.in" target="_blank">dcrodjer</a>
+  </footer>
+</body>
+</html>

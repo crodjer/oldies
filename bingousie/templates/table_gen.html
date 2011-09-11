@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% block content %}  
+  <h2 style="float:right;"><a href = "/new/">Start!</a></h2>  
+  <table>    
+  <tr>{% for number in all_numbers %}  
+    <td><div id="n_{{ number }}">{{ number }}</div></td>{% if number|divisibleby:10 %}
+  </tr>        
+  <tr>{% endif %}{% endfor %}  
+  </tr>  
+  </table>   
+{% endblock %}
+

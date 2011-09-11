@@ -1,0 +1,15 @@
+###Bingo Board
+
+This is just a bingo board and nothing more which I wrote, so that during my
+family Bingo night, one person does not have to loose the fun of the game
+calling out the numbers.
+
+The waplib dir is an attempt to initiate a mini framework supporting openid
+functionality and class based views for a little simplification with DRYer
+code.
+
+Update:  
+[Django-nonrel](http://www.allbuttonspressed.com/projects/django-nonrel) and
+[Web2py](http://web2py.com/) work pretty well with GAE, so no more work on a
+mini framework. Also with amazon ec2 and ep.io around, GAE is not too
+preferable a host for hosting applications.

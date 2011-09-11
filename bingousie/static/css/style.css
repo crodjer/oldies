@@ -1,0 +1,146 @@
+*{
+  margin:0;
+  padding:0;
+}
+html, body, header, body, section, footer 
+{
+  display:block;
+}
+html
+{
+  font-family: “Trebuchet MS”, Verdana, Arial, Helvetica, sans-serif;
+  width:100%;
+  height:100%;
+  background:#ffa;
+}
+body
+{
+  width:1000px;
+  margin:0 auto;       
+  padding: 10px 15px;
+  display:none;
+}
+header
+{    
+  padding:5px;
+}
+section
+{
+  background:#ace;
+  padding: 25px 25px ;
+  border-radius: 15px;  
+  -moz-border-radius: 15px;
+  -webkit-border-radius: 15px;
+  min-height:500px;
+  position:relative;
+}
+
+aside
+{
+  position:relative;
+  float:right;  
+  width:180px;
+  min-height:530px;
+  
+}
+
+footer
+{
+  padding:5px;
+  text-align:center;
+  font-size:small;
+}
+
+.button
+{
+  display:block;
+  color:white;
+  text-decoration:none;
+  font-size:30px;
+  background:#070;  
+  padding: 30px 5px;
+  width:180px;
+  text-align:center;  
+  cursor:pointer;  
+}
+
+.button:hover
+{
+  background: #0a0;
+}
+
+.button:active
+{
+  background: #040;
+}
+
+.hidden
+{
+  display:none;
+}
+
+#done
+{
+  position:relative;
+  top:25px;
+  font-size:45px;  
+}
+#status
+{
+  position:absolute;
+  display:block;
+  bottom:0px;
+  color:white;
+  font-size:120px;
+  font-weight:700;  
+  width:175px;
+  height:140px;
+  padding: 30px 5px;  
+  text-align:center; 
+  background: #040;
+  -webkit-box-shadow:0 0 15px 5px  #333;
+  -moz-box-shadow:0 0 15px 5px  #333;
+  box-shadow:0 0 15px 5px  #333;     
+}
+
+table
+{  
+  font-size:40px;  
+}
+table tr
+{
+  position:relative;
+}
+td
+{  
+  text-align:center;      
+}
+td div
+{
+  width:70px;
+  line-height:55px;
+  border:1px solid #777;
+  background: #79a;
+}
+td div.passed
+{
+  background:#ddd;
+}
+
+td div.current
+{
+  background:#f55;
+  -webkit-box-shadow:0 0 15px 5px  #333;
+  -moz-box-shadow:0 0 15px 5px  #333;
+  box-shadow:0 0 15px 5px  #333;
+  position:relative;  
+  z-index:5;
+  font-weight:700;
+}
+
+td div, section, .button, #status
+{
+  border-radius: 15px;  
+  -moz-border-radius: 15px;
+  -webkit-border-radius: 15px;
+}
